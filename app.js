@@ -50,6 +50,10 @@ const State = {
 const $ = id => document.getElementById(id);
 const DOM = {
   clock: $('clock'), date: $('date'),
+  // theme toggle
+  btnThemeToggle: $('btnThemeToggle'),
+  iconDark: $('iconDark'),
+  iconLight: $('iconLight'),
   // tabs
   tabs:           document.querySelectorAll('.tab'),
   tabContents:    document.querySelectorAll('.tab-content'),
@@ -132,6 +136,37 @@ const DOM = {
   syncDot:           $('syncDot'),
   syncLabel:         $('syncLabel'),
 };
+
+// ──────────────────────────────────────────────
+// THEME TOGGLE
+// ──────────────────────────────────────────────
+function setTheme(theme) {
+  const html = document.documentElement;
+  
+  if (theme === 'light') {
+    html.setAttribute('data-theme', 'light');
+    DOM.iconDark.style.display = 'none';
+    DOM.iconLight.style.display = 'block';
+  } else {
+    html.removeAttribute('data-theme');
+    DOM.iconDark.style.display = 'block';
+    DOM.iconLight.style.display = 'none';
+  }
+  
+  localStorage.setItem('pharmapos_theme', theme);
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  setTheme(newTheme);
+}
+
+DOM.btnThemeToggle.addEventListener('click', toggleTheme);
+
+// Load saved theme on init
+const savedTheme = localStorage.getItem('pharmapos_theme') || 'dark';
+setTheme(savedTheme);
 
 // ──────────────────────────────────────────────
 // UTILS
